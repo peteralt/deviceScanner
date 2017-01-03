@@ -1,4 +1,4 @@
-import nmap, requests, json
+import nmap, requests, json, logging
 from pymongo import MongoClient
 from datetime import datetime
 
@@ -9,16 +9,22 @@ class deviceScanner:
     portScanner = nmap.PortScanner()
 
     dbClient = None
+    logging.basicConfig(filename="/var/tmp/deviceScanner.log", level=logging.INFO)
 
     def __init___(self, network = None):
         if network is not None:
             self.network = network
-        print "Scanning for network: ", self.network,"..."
 
     def initDatabase(self):
         if self.dbClient == None:
             self.dbClient = MongoClient()
             self.database = self.dbClient.deviceScanner
+
+    def logInfo(self, message):
+        logging.info(message)
+
+    def logError(self, message):
+        logging.error(message)
 
     def scan(self):
         """Returns a dictionary with all devices found on the network (mac, IP and vendor info)"""
@@ -67,3 +73,17 @@ class deviceScanner:
             return r.status_code
         except:
             return None
+
+if __name__ == '__main__':
+    scanner = deviceScanner()
+    print "Scanning network: ", scanner.network
+    results = scanner.scan()
+    if len(results) > 0:
+        print "Found",len(results),"devices:"
+        scanner.logInfo(str(len(results)) + ' devices found')
+        for device in results:
+            print "\tDevice:", device['mac'], "@", device['ip'], "(", device['vendor'],")"
+            #result = scanner.saveDevice(device)
+    else:
+        print "No devices found. Are you sure you running with sudo priviledges?"
+        scanner.logError('No devices found')
