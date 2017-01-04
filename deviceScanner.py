@@ -83,7 +83,7 @@ if __name__ == '__main__':
         scanner.logInfo(str(len(results)) + ' devices found')
         for device in results:
             print "\tDevice:", device['mac'], "@", device['ip'], "(", device['vendor'],")"
-            #result = scanner.saveDevice(device)
+            result = scanner.saveDevice(device)
     else:
         print "No devices found. Are you sure you running with sudo priviledges?"
         scanner.logError('No devices found')
