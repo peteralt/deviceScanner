@@ -80,7 +80,7 @@ if __name__ == '__main__':
     results = scanner.scan()
     if len(results) > 0:
         print "Found",len(results),"devices:"
-        scanner.logInfo(str(len(results)) + ' devices found')
+        scanner.logInfo(str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + ': ' + str(len(results)) + ' devices found')
         for device in results:
             print "\tDevice:", device['mac'], "@", device['ip'], "(", device['vendor'],")"
             result = scanner.saveDevice(device)
