@@ -1,0 +1,9 @@
+{
+	"devices": {
+		"MAC-ADDRESS-HERE" : "Peter's iPhone"
+	},
+	"backend_url": "http://localhost:2000/api/devices",
+	"local_network": "192.168.0.0/24",
+  "logging_file": "/var/tmp/deviceScanner.log",
+  "slack_url" : ""
+}
