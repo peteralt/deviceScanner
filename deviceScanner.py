@@ -1,4 +1,4 @@
-import nmap, requests, json, logging
+import nmap, requests, json, logging, os
 from pymongo import MongoClient
 from datetime import datetime
 from pprint import pprint
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     backendURL = None
     loggingFile = None
 
-    with open('settings.json') as data_file:
+    with open(os.path.dirname(os.path.abspath(__file__))+'/settings.json') as data_file:
         print("Loading settings...")
         data = json.load(data_file)
         network = data['local_network']
@@ -116,9 +116,10 @@ if __name__ == '__main__':
             print ("\tDevice:", device['mac'], "@", device['ip'], "(", device['vendor'],")", name)
             result = scanner.saveDevice(device)
         if knownDeviceFound:
-            print("known device found")
+            print("Known devices: found")
             slack.notify(text="Known device found. Someone is home!", channel="#home", username="nest-bot", icon_emoji=":snowflake:")
         else:
+            print("Known devices: not found")
             slack.notify(text="No known devices found. Seems everyone is out.", channel="#home", username="nest-bot", icon_emoji=":snowflake:")
     else:
         print ("No devices found. Are you sure you running with sudo priviledges?")
